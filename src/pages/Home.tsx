@@ -1,0 +1,71 @@
+interface Props {
+  logged: boolean;
+}
+
+const Home = ({ logged }: Props) => {
+  return (
+    <div className="home-page">
+      <h1 className="home-title">WebClinic</h1>
+      <hr />
+      <h2>Welcome to the WebClinic Service</h2>
+      <hr />
+      <h5 className="home-paragraph-header">What We Do?</h5>
+      <p>
+        {" "}
+        The Web Clinic Service App revolutionizes the digital landscape,
+        offering a comprehensive solution for individuals and businesses seeking
+        excellence in web development and design. This innovative app serves as
+        a virtual clinic, providing a curated set of tools, resources, and
+        services to elevate web projects. Users can access a diverse range of
+        features, including interactive tutorials, real-time collaboration
+        tools, and a repository of design assets. The app's user-friendly
+        interface ensures accessibility for both novices and seasoned
+        developers, fostering a collaborative environment that encourages skill
+        enhancement and creative exploration. With its dynamic suite of
+        services, the Web Clinic Service App is poised to become an
+        indispensable companion for anyone navigating the ever-evolving realms
+        of web technology and design, ultimately empowering users to transform
+        their digital visions into reality.
+      </p>
+      <hr />
+      <h5 className="home-paragraph-header">Our Vison</h5>
+      <p>
+        {" "}
+        WebClinic envisions a future where the digital landscape is a realm of
+        limitless possibilities, creativity, and accessibility. Our vision is
+        rooted in the belief that web development and design should be an
+        inclusive journey for all, regardless of expertise. We see a community
+        where aspiring developers, seasoned professionals, and creative minds
+        converge to exchange ideas, learn from each other, and push the
+        boundaries of innovation. WebClinic aims to be the beacon guiding
+        individuals and businesses toward digital excellence, offering a
+        visionary platform that combines cutting-edge technologies, educational
+        resources, and collaborative tools. Through our vision, we aspire to
+        empower every user to shape the digital world, fostering a global
+        network where the art and science of web development thrive in harmony
+        with the diverse visions and aspirations of our community.
+      </p>
+      <hr />
+      {!logged && (
+        <div className="home-btns">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => null}
+          >
+            Log In to our web service
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => null}
+          >
+            Create a new account
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Home;
