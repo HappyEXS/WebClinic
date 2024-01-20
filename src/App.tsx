@@ -14,54 +14,33 @@ import Schedule from "./pages/Schedule";
 import Visits from "./pages/Visits";
 import Doctors from "./pages/Doctors";
 import Patients from "./pages/Patients";
+import { Speciality } from "./shared/types";
 import "./App.css";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<CurrentPage>(CurrentPage.Home);
 
   const [showAlert, setShowAlert] = useState(false);
-  const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(true);
   const [userId, setUserId] = useState(-1);
   const [userType, setUserType] = useState("director");
 
-  const specialities = [
-    {
-      specialityId: 1,
-      name: "domowy",
-    },
-    {
-      specialityId: 2,
-      name: "laryngolog",
-    },
-    {
-      specialityId: 3,
-      name: "dermatolog",
-    },
-    {
-      specialityId: 4,
-      name: "okulista",
-    },
-    {
-      specialityId: 5,
-      name: "neurolog",
-    },
-    {
-      specialityId: 6,
-      name: "ortopeda",
-    },
-    {
-      specialityId: 7,
-      name: "pediatra",
-    },
-  ];
+  const spec1: Speciality = { specialityId: 1, name: "domowy" };
+  const spec2: Speciality = { specialityId: 2, name: "laryngolog" };
+  const spec3: Speciality = { specialityId: 3, name: "dermatolog" };
+  const spec4: Speciality = { specialityId: 4, name: "okulista" };
+  const spec5: Speciality = { specialityId: 5, name: "neurolog" };
+  const spec6: Speciality = { specialityId: 6, name: "ortopeda" };
+  const spec7: Speciality = { specialityId: 7, name: "pediatra" };
+  const specialities = [spec1, spec2, spec3, spec4, spec5, spec6, spec7];
   //<meta charset="utf-8" />
   return (
-    <html lang="en">
+    <html lang="en" id="html">
       <head>
         {" "}
         <title>WebClinic</title>
       </head>
-      <body>
+      <body id="body">
         <header>
           <Navbar logged={logged} userType={userType}></Navbar>
         </header>
@@ -76,7 +55,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home logged={logged} />} />
               <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
+              <Route path="reg" element={<Register />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route
                 path="schedule"
@@ -84,7 +63,10 @@ function App() {
                   <Schedule userType={userType} specialities={specialities} />
                 }
               />
-              <Route path="specialities" element={<Specialities />} />
+              <Route
+                path="specialities"
+                element={<Specialities specialities={specialities} />}
+              />
               <Route
                 path="visits"
                 element={
@@ -100,7 +82,7 @@ function App() {
             </Routes>
           </main>
         </div>
-        <footer className="border-top footer text-muted">
+        <footer id="footer" className="border-top footer text-muted">
           <div className="container">
             &copy; 2023 - WebClinic -{" "}
             <Link className="navbar-brand" to="/">

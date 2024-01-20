@@ -1,11 +1,13 @@
 import { Button, Modal, ModalHeader } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Speciality } from "../shared/types";
+import SearchBox from "../components/SearchBox";
 import { useState } from "react";
 
 interface Props {
   userType: string;
   userId: number;
-  specialities: { name: string; specialityId: number }[];
+  specialities: Speciality[];
 }
 
 const Visits = ({ userType, userId, specialities }: Props) => {
@@ -54,10 +56,6 @@ const Visits = ({ userType, userId, specialities }: Props) => {
   const [startDate, setStartDate] = useState(new Date("2024-01-01"));
   const [endDate, setEndDate] = useState(new Date("2024-02-01"));
 
-  function handleSubmit(e) {
-    e.preventDefault();
-  }
-
   return (
     <>
       <table className="table-header">
@@ -67,65 +65,16 @@ const Visits = ({ userType, userId, specialities }: Props) => {
           </td>
         </tr>
       </table>
-      <table>
-        <tr>
-          <div>
-            <form method="post" onSubmit={handleSubmit}>
-              <td className="table-item">
-                <label>
-                  Speciality
-                  <select className="form-control">
-                    <option value={-1}>--all--</option>
-                    {specialities.map((speciality, index) =>
-                      speciality.specialityId === selectedSpeciality ? (
-                        <option value={speciality.specialityId} selected>
-                          {speciality.name}
-                        </option>
-                      ) : (
-                        <option
-                          value={speciality.specialityId}
-                          onClick={() =>
-                            setSelectedSpeciality(speciality.specialityId)
-                          }
-                        >
-                          {speciality.name}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </label>
-              </td>
-              <td className="table-item">
-                <label>
-                  Start Date
-                  <input
-                    type="date"
-                    value={startDate.toDateString()}
-                    className="form-control"
-                    onChange={(e) => setStartDate(new Date(e.target.value))}
-                  />
-                </label>
-              </td>
-              <td className="table-item">
-                <label>
-                  End Date
-                  <input
-                    type="date"
-                    value={endDate.toDateString()}
-                    className="form-control"
-                    onChange={(e) => setEndDate(new Date(e.target.value))}
-                  />
-                </label>
-              </td>
-              <td className="table-item">
-                <button type="submit" className="btn btn-primary">
-                  Search
-                </button>
-              </td>
-            </form>
-          </div>
-        </tr>
-      </table>
+      <SearchBox
+        specialities={specialities}
+        selectedSpeciality={selectedSpeciality}
+        setSelectedSpeciality={setSelectedSpeciality}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+      ></SearchBox>
+
       <hr />
       <div className="main-body">
         <table className="main-table">

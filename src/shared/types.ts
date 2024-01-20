@@ -9,3 +9,8 @@ export enum CurrentPage {
     Doctors = "doctors",
     Patients = "patients",
   }
+
+export type Speciality = {
+  specialityId: number
+  name: string
+}

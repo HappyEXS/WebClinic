@@ -4,8 +4,8 @@ interface Props {
 
 const Home = ({ logged }: Props) => {
   return (
-    <div className="home-page">
-      <h1 className="home-title">WebClinic</h1>
+    <div id="home-page">
+      <h1 id="home-title">WebClinic</h1>
       <hr />
       <h2>Welcome to the WebClinic Service</h2>
       <hr />
@@ -47,10 +47,11 @@ const Home = ({ logged }: Props) => {
       </p>
       <hr />
       {!logged && (
-        <div className="home-btns">
+        <div id="home-btns">
           <button
             type="button"
             className="btn btn-primary"
+            id="button"
             onClick={() => null}
           >
             Log In to our web service
@@ -58,6 +59,7 @@ const Home = ({ logged }: Props) => {
           <button
             type="button"
             className="btn btn-secondary"
+            id="button"
             onClick={() => null}
           >
             Create a new account

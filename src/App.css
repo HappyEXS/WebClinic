@@ -1,4 +1,4 @@
-html {
+#html {
     font-size: 14px;
   }
 
@@ -8,29 +8,40 @@ html {
     }
   }
 
-  html {
+  #html {
     position: relative;
     min-height: 100%;
   }
 
-  body {
-      background: rgb(124, 182, 201);
+  #body {
+      background: lightblue;
       margin-bottom: 60px;
   }
 
-  .home-page {
-      padding-top: 120px;
-      text-align: justify;
+  #footer {
+    /* position: absolute; */
+    max-height: 100;
+
+	}
+	nav {
+			background: white;
+			margin-bottom: 20px;
+	}
+
+	#home-page {
+    padding-top: 120px;
+    text-align: justify;
 
   }
-  .home-title {
+  #home-title {
       font-size: 45px;
+			margin: auto;
       font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
   }
-  .home-page p{
+  #home-page p{
       font-family: 'Times New Roman', Times, serif;
   }
-  .home-page h5 {
+  #home-page h5 {
       font-family: 'Times New Roman', Times, serif;
   }
 
@@ -101,3 +112,11 @@ html {
       margin-bottom: 15px;
       text-align: center;
   }
+
+	#button {
+		margin: 10px;
+	}
+	#button-table {
+		margin-left: 10px;
+		margin-right: 10px;
+	}

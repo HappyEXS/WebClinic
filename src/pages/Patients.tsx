@@ -64,6 +64,7 @@ const Patients = () => {
                   <a
                     asp-action="Activate"
                     className="btn btn-outline-primary"
+                    id="button-table"
                     asp-route-patientId="@patient.PatientID"
                   >
                     Activate
@@ -71,6 +72,7 @@ const Patients = () => {
                   <a
                     asp-action="Disactivate"
                     className="btn btn-outline-secondary"
+                    id="button-table"
                     asp-route-patientId="@patient.PatientID"
                   >
                     Disactivate
@@ -80,6 +82,7 @@ const Patients = () => {
                   <a
                     asp-action="Delete"
                     className="btn btn-outline-danger"
+                    id="button-table"
                     asp-route-patientId="@patient.PatientID"
                     onClick={() => null}
                   >

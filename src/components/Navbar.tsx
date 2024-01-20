@@ -80,7 +80,7 @@ const Navbar = ({ logged, userType }: Props) => {
               ) : (
                 <>
                   <li className="nav-item">
-                    <Link className="nav-link active" to="/register">
+                    <Link className="nav-link active" to="/reg">
                       Register
                     </Link>
                   </li>

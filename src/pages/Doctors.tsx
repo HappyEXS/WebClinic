@@ -34,6 +34,7 @@ const Doctors = () => {
             <button
               type="submit"
               className="btn btn-primary"
+              id="button"
               onClick={() => null}
             >
               Create new doctor account
@@ -68,6 +69,7 @@ const Doctors = () => {
                   <a
                     asp-action="Schedule"
                     className="btn btn-outline-primary"
+                    id="button-table"
                     asp-route-doctorId="@doctor.DoctorID"
                     asp-route-weekStart="@doctor.getLastMonday()"
                   >
@@ -78,6 +80,7 @@ const Doctors = () => {
                   <a
                     asp-action="Edit"
                     className="btn btn-outline-secondary"
+                    id="button-table"
                     asp-route-doctorId="@doctor.DoctorID"
                   >
                     Edit
@@ -85,6 +88,7 @@ const Doctors = () => {
                   <a
                     asp-action="Delete"
                     className="btn btn-outline-danger"
+                    id="button-table"
                     asp-route-doctorId="@doctor.DoctorID"
                     onClick={() => null}
                   >

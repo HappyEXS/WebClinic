@@ -26,7 +26,6 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <span asp-validation-for="Name" className="text-danger"></span>
           </div>
 
           <div className="mb-3">
@@ -39,7 +38,6 @@ const Register = () => {
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
             />
-            <span asp-validation-for="Surname" className="text-danger"></span>
           </div>
 
           <div className="mb-3">
@@ -65,7 +63,6 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <span asp-validation-for="Email" className="text-danger"></span>
           </div>
 
           <div className="mb-3">
@@ -78,10 +75,9 @@ const Register = () => {
               value={password}
               onChange={(e) => setPasword(e.target.value)}
             />
-            <span asp-validation-for="Password" className="text-danger"></span>
           </div>
 
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <label className="form-check-label">
               <input
                 className="form-check-input"
@@ -97,13 +93,13 @@ const Register = () => {
                 Check this checkbox to continue.
               </div>
             </label>
-          </div>
+          </div> */}
 
           <div className="mb-3">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" id="button">
               Create
             </button>
-            <button type="button" className="btn btn-secondary">
+            <button type="button" className="btn btn-secondary" id="button">
               Home
             </button>
           </div>
