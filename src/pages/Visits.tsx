@@ -1,8 +1,7 @@
-import { Button, Modal, ModalHeader } from "flowbite-react";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { Speciality } from "../shared/types";
+import React, { useState, useEffect } from "react";
+import { Visit, Speciality, SchVisQuery } from "../shared/types";
+import { VisitService } from "../services/VisitService";
 import SearchBox from "../components/SearchBox";
-import { useState } from "react";
 
 interface Props {
   userType: string;
@@ -11,50 +10,36 @@ interface Props {
 }
 
 const Visits = ({ userType, userId, specialities }: Props) => {
-  let visits = [
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "10-01-2024",
-      dayOfWeek: "Monday",
-      startHour: "9:00",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "10-01-2024",
-      dayOfWeek: "Monday",
-      startHour: "9:15",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "10-01-2024",
-      dayOfWeek: "Monday",
-      startHour: "9:30",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "12-01-2024",
-      dayOfWeek: "Wednesday",
-      startHour: "9:00",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "15-01-2024",
-      dayOfWeek: "Saturday",
-      startHour: "9:00",
-    },
-  ];
-
   let timeNow = "10:25";
   let patientActive = true;
   const [openModal, setOpenModal] = useState(false);
   const [selectedSpeciality, setSelectedSpeciality] = useState(-1);
   const [startDate, setStartDate] = useState(new Date("2024-01-01"));
   const [endDate, setEndDate] = useState(new Date("2024-02-01"));
+
+  let q: SchVisQuery = {
+    startDate: "",
+    endDate: "",
+    specID: -1,
+    searched: false,
+  };
+  const [query, setQuery] = useState<SchVisQuery>(q);
+  const [visits, setVisits] = useState<Array<Visit>>([]);
+
+  useEffect(() => {
+    retriveSchedules();
+  }, []);
+
+  const retriveSchedules = () => {
+    VisitService.getAll()
+      .then((response: any) => {
+        setVisits(response.data as Visit[]);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -67,12 +52,8 @@ const Visits = ({ userType, userId, specialities }: Props) => {
       </table>
       <SearchBox
         specialities={specialities}
-        selectedSpeciality={selectedSpeciality}
-        setSelectedSpeciality={setSelectedSpeciality}
-        startDate={startDate}
-        setStartDate={setStartDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
+        query={query}
+        setQuery={setQuery}
       ></SearchBox>
 
       <hr />
@@ -91,15 +72,26 @@ const Visits = ({ userType, userId, specialities }: Props) => {
             </tr>
           </thead>
           <tbody className="visit-body">
+            {visits.length === 0 && <p>No visits found</p>}
             {visits.map((visit, index) => (
               <tr className="table-row">
-                <td className="table-item">{visit.doctorName}</td>
-                <td className="table-item">{visit.doctorSpeciality}</td>
-                <td className="table-item">{visit.date}</td>
-                <td className="table-item">{visit.dayOfWeek}</td>
-                <td className="table-item">{visit.startHour}</td>
+                <td className="table-item">
+                  {visit.schedule.doctor.name +
+                    " " +
+                    visit.schedule.doctor.surname}
+                </td>
+                <td className="table-item">
+                  {visit.schedule.doctor.speciality.name}
+                </td>
+                <td className="table-item">
+                  {visit.startTime.substring(0, 10)}
+                </td>
+                <td className="table-item">{visit.startTime}</td>
+                <td className="table-item">
+                  {visit.startTime.substring(11, 16)}
+                </td>
                 {userType === "patient" ? (
-                  visit.startHour < timeNow || patientActive === false ? (
+                  visit.startTime < timeNow || patientActive === false ? (
                     <td className="table-item">
                       <a className="btn btn-outline-dark" onClick={() => null}>
                         Sign up
@@ -123,7 +115,7 @@ const Visits = ({ userType, userId, specialities }: Props) => {
           </tbody>
         </table>
       </div>
-      <Modal
+      {/* <Modal
         show={openModal}
         size="max-w-sm"
         position="center"
@@ -147,7 +139,7 @@ const Visits = ({ userType, userId, specialities }: Props) => {
             </div>
           </div>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

@@ -3,17 +3,19 @@ import Navbar from "./components/Navbar";
 
 import { Routes, Route, Link } from "react-router-dom";
 import { CurrentPage } from "./shared/types";
-import { useState } from "react";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Specialities from "./pages/Specialities";
-import Schedule from "./pages/Schedule";
+import Schedules from "./pages/Schedules";
 import Visits from "./pages/Visits";
 import Doctors from "./pages/Doctors";
 import Patients from "./pages/Patients";
+
+import React, { useState, useEffect } from "react";
+import { SpecialityService } from "./services/SpecialityService";
 import { Speciality } from "./shared/types";
 import "./App.css";
 
@@ -25,14 +27,23 @@ function App() {
   const [userId, setUserId] = useState(-1);
   const [userType, setUserType] = useState("director");
 
-  const spec1: Speciality = { specialityId: 1, name: "domowy" };
-  const spec2: Speciality = { specialityId: 2, name: "laryngolog" };
-  const spec3: Speciality = { specialityId: 3, name: "dermatolog" };
-  const spec4: Speciality = { specialityId: 4, name: "okulista" };
-  const spec5: Speciality = { specialityId: 5, name: "neurolog" };
-  const spec6: Speciality = { specialityId: 6, name: "ortopeda" };
-  const spec7: Speciality = { specialityId: 7, name: "pediatra" };
-  const specialities = [spec1, spec2, spec3, spec4, spec5, spec6, spec7];
+  const [specialities, setSpecialities] = useState<Array<Speciality>>([]);
+
+  useEffect(() => {
+    retriveSpecialities();
+  }, []);
+
+  const retriveSpecialities = () => {
+    SpecialityService.getAll()
+      .then((response: any) => {
+        setSpecialities(response.data as Speciality[]);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+
   //<meta charset="utf-8" />
   return (
     <html lang="en" id="html">
@@ -60,7 +71,7 @@ function App() {
               <Route
                 path="schedule"
                 element={
-                  <Schedule userType={userType} specialities={specialities} />
+                  <Schedules userType={userType} specialities={specialities} />
                 }
               />
               <Route

@@ -1,24 +1,12 @@
-import { Speciality } from "../shared/types";
+import { Speciality, SchVisQuery } from "../shared/types";
 
 interface Props {
   specialities: Speciality[];
-  selectedSpeciality: number;
-  setSelectedSpeciality: (number: number) => void;
-  startDate: Date;
-  setStartDate: (date: Date) => void;
-  endDate: Date;
-  setEndDate: (date: Date) => void;
+  query: SchVisQuery;
+  setQuery: (query: SchVisQuery) => void;
 }
 
-const SearchBox = ({
-  specialities,
-  selectedSpeciality,
-  setSelectedSpeciality,
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-}: Props) => {
+const SearchBox = ({ specialities, query, setQuery }: Props) => {
   function handleSubmit(e) {
     e.preventDefault();
   }
@@ -35,15 +23,15 @@ const SearchBox = ({
                   <select className="form-control">
                     <option value={-1}>--all--</option>
                     {specialities.map((speciality, index) =>
-                      speciality.specialityId === selectedSpeciality ? (
-                        <option value={speciality.specialityId} selected>
+                      speciality.specialityID === query.specID ? (
+                        <option value={speciality.specialityID} selected>
                           {speciality.name}
                         </option>
                       ) : (
                         <option
-                          value={speciality.specialityId}
+                          value={speciality.specialityID}
                           onClick={() =>
-                            setSelectedSpeciality(speciality.specialityId)
+                            (query.specID = speciality.specialityID)
                           }
                         >
                           {speciality.name}
@@ -58,9 +46,11 @@ const SearchBox = ({
                   Start Date
                   <input
                     type="date"
-                    value={startDate.toDateString()}
+                    value={query.startDate}
                     className="form-control"
-                    onChange={(e) => setStartDate(new Date(e.target.value))}
+                    onChange={(e) =>
+                      (query.startDate = new Date(e.target.value).toString())
+                    }
                   />
                 </label>
               </td>
@@ -69,9 +59,11 @@ const SearchBox = ({
                   End Date
                   <input
                     type="date"
-                    value={endDate.toDateString()}
+                    value={query.endDate}
                     className="form-control"
-                    onChange={(e) => setEndDate(new Date(e.target.value))}
+                    onChange={(e) =>
+                      (query.endDate = new Date(e.target.value).toString())
+                    }
                   />
                 </label>
               </td>

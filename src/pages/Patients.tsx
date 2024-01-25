@@ -1,30 +1,24 @@
-const Patients = () => {
-  let patients = [
-    {
-      patientId: 101,
-      lastName: "Kiler",
-      firstName: "Jurek",
-      birthDate: "10-01-2024",
-      email: "laryngolog",
-      active: "true",
-    },
-    {
-      patientId: 102,
-      lastName: "Kiler",
-      firstName: "Jurek",
-      birthDate: "10-01-2024",
-      email: "laryngolog",
-      active: "true",
-    },
-    {
-      patientId: 103,
-      lastName: "Kiler",
-      firstName: "Jurek",
-      birthDate: "10-01-2024",
-      email: "laryngolog",
-      active: "false",
-    },
-  ];
+import React, { useState, useEffect } from "react";
+import { Patient } from "../shared/types";
+import { PatientService } from "../services/PatientService";
+
+function Patients() {
+  const [patients, setPatients] = useState<Array<Patient>>([]);
+
+  useEffect(() => {
+    retrivePatients();
+  }, []);
+
+  const retrivePatients = () => {
+    PatientService.getAll()
+      .then((response: any) => {
+        setPatients(response.data as Patient[]);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -54,12 +48,14 @@ const Patients = () => {
           <tbody className="doctor-body">
             {patients.map((patient, index) => (
               <tr className="table-row">
-                <td className="table-item">{patient.patientId}</td>
-                <td className="table-item">{patient.lastName}</td>
-                <td className="table-item">{patient.firstName}</td>
-                <td className="table-item">{patient.birthDate}</td>
+                <td className="table-item">{patient.patientID}</td>
+                <td className="table-item">{patient.surname}</td>
+                <td className="table-item">{patient.name}</td>
+                <td className="table-item">
+                  {patient.dateOfBirth.substring(0, 10)}
+                </td>
                 <td className="table-item">{patient.email}</td>
-                <td className="table-item">{patient.active}</td>
+                <td className="table-item">{patient.isActive.toString()}</td>
                 <td className="table-item">
                   <a
                     asp-action="Activate"
@@ -96,6 +92,6 @@ const Patients = () => {
       </div>
     </>
   );
-};
+}
 
 export default Patients;

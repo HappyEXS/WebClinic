@@ -1,27 +1,24 @@
+import React, { useState, useEffect } from "react";
+import { Doctor } from "../shared/types";
+import { DoctorService } from "../services/DoctorService";
+
 const Doctors = () => {
-  let doctors = [
-    {
-      doctorId: 101,
-      lastName: "Kiler",
-      firstName: "Jurek",
-      birthDate: "10-01-2024",
-      speciality: "laryngolog",
-    },
-    {
-      doctorId: 102,
-      lastName: "Kiler",
-      firstName: "Jurek",
-      birthDate: "10-01-2024",
-      speciality: "laryngolog",
-    },
-    {
-      doctorId: 103,
-      lastName: "Kiler",
-      firstName: "Jurek",
-      birthDate: "10-01-2024",
-      speciality: "laryngolog",
-    },
-  ];
+  const [doctors, setDoctors] = useState<Array<Doctor>>([]);
+
+  useEffect(() => {
+    retriveDoctors();
+  }, []);
+
+  const retriveDoctors = () => {
+    DoctorService.getAll()
+      .then((response: any) => {
+        setDoctors(response.data as Doctor[]);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -60,11 +57,13 @@ const Doctors = () => {
           <tbody className="doctor-body">
             {doctors.map((doctor, index) => (
               <tr className="table-row">
-                <td className="table-item">{doctor.doctorId}</td>
-                <td className="table-item">{doctor.lastName}</td>
-                <td className="table-item">{doctor.firstName}</td>
-                <td className="table-item">{doctor.birthDate}</td>
-                <td className="table-item">{doctor.speciality}</td>
+                <td className="table-item">{doctor.doctorID}</td>
+                <td className="table-item">{doctor.surname}</td>
+                <td className="table-item">{doctor.name}</td>
+                <td className="table-item">
+                  {doctor.dateOfBirth.substring(0, 10)}
+                </td>
+                <td className="table-item">{doctor.speciality.name}</td>
                 <td className="table-item">
                   <a
                     asp-action="Schedule"

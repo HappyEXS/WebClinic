@@ -1,52 +1,44 @@
-import { useState } from "react";
-import { Speciality } from "../shared/types";
+import React, { useState, useEffect } from "react";
+import { Schedule, Speciality, SchVisQuery } from "../shared/types";
+import { ScheduleService } from "../services/ScheduleService";
+
 import SearchBox from "../components/SearchBox";
 import { ListGroup } from "flowbite-react";
 
 interface Props {
-  // schedules: {
-  //   doctorName: string;
-  //   doctorSpeciality: string;
-  //   date: string;
-  //   dayOfWeek: string;
-  //   startHour: string;
-  //   endHour: string;
-  // }[];
   userType: string;
   specialities: Speciality[];
 }
 
-function Schedule({ specialities, userType }: Props) {
-  let schedules = [
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "10-01-2024",
-      dayOfWeek: "Monday",
-      startHour: "9:00",
-      endHour: "12:30",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "12-01-2024",
-      dayOfWeek: "Wednesday",
-      startHour: "9:00",
-      endHour: "12:30",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      date: "15-01-2024",
-      dayOfWeek: "Saturday",
-      startHour: "9:00",
-      endHour: "12:30",
-    },
-  ];
-
+function Schedules({ specialities, userType }: Props) {
   const [selectedSpeciality, setSelectedSpeciality] = useState(-1);
   const [startDate, setStartDate] = useState(new Date("2024-01-01"));
   const [endDate, setEndDate] = useState(new Date("2024-02-01"));
+
+  let q: SchVisQuery = {
+    startDate: "",
+    endDate: "",
+    specID: -1,
+    searched: false,
+  };
+  const [query, setQuery] = useState<SchVisQuery>(q);
+
+  const [schedules, setSchedules] = useState<Array<Schedule>>([]);
+
+  useEffect(() => {
+    retriveSchedules();
+  }, []);
+
+  const retriveSchedules = () => {
+    ScheduleService.getAll()
+      .then((response: any) => {
+        setSchedules(response.data as Schedule[]);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -70,12 +62,8 @@ function Schedule({ specialities, userType }: Props) {
       </table>
       <SearchBox
         specialities={specialities}
-        selectedSpeciality={selectedSpeciality}
-        setSelectedSpeciality={setSelectedSpeciality}
-        startDate={startDate}
-        setStartDate={setStartDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
+        query={query}
+        setQuery={setQuery}
       ></SearchBox>
       <hr />
       <div className="main-body">
@@ -91,15 +79,25 @@ function Schedule({ specialities, userType }: Props) {
             </tr>
           </thead>
           <tbody className="schedule-body">
-            {schedules.length === 0 && <p>No items found</p>}
+            {schedules.length === 0 && <p>No schedules found</p>}
             {schedules.map((schedule, index) => (
               <tr className="table-row">
-                <td className="table-item">{schedule.doctorName}</td>
-                <td className="table-item">{schedule.doctorSpeciality}</td>
-                <td className="table-item">{schedule.date}</td>
-                <td className="table-item">{schedule.dayOfWeek}</td>
-                <td className="table-item">{schedule.startHour}</td>
-                <td className="table-item">{schedule.endHour}</td>
+                <td className="table-item">
+                  {schedule.doctor.name + " " + schedule.doctor.surname}
+                </td>
+                <td className="table-item">
+                  {schedule.doctor.speciality.name}
+                </td>
+                <td className="table-item">
+                  {schedule.startTime.substring(0, 10)}
+                </td>
+                <td className="table-item">{schedule.startTime}</td>
+                <td className="table-item">
+                  {schedule.startTime.substring(11, 16)}
+                </td>
+                <td className="table-item">
+                  {schedule.endTime.substring(11, 16)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -109,4 +107,4 @@ function Schedule({ specialities, userType }: Props) {
   );
 }
 
-export default Schedule;
+export default Schedules;

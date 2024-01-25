@@ -16,41 +16,50 @@ export type Speciality = {
 }
 
 export type Doctor = {
-  DoctorID: number;
-  Name: string;
-  Surname: string;
-  DateOfBirth: string;
-  Email: string;
-  Password: string;
-  SpecialityID: number;
-  Speciality: Speciality;
-  RowVersion: string;
+  doctorID: number;
+  name: string;
+  surname: string;
+  dateOfBirth: string;
+  email: string;
+  password: string;
+  specialityID: number;
+  speciality: Speciality;
+  rowVersion: string;
 }
 
 export type Patient = {
-  PatientID: number;
-  Name: string;
-  Surname: string;
-  DateOfBirth: string;
-  Email: string;
-  Password: string;
-  IsActive: boolean;
-  RowVersion: string;
+  patientID: number;
+  name: string;
+  surname: string;
+  dateOfBirth: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+  rowVersion: string;
 }
 
 export type Schedule = {
-  ScheduleID: number;
-  DoctorID: number;
-  Doctor: Doctor;
-  StartTime: string;
-  EndTime: string;
+  scheduleID: number;
+  doctorID: number;
+  doctor: Doctor;
+  startTime: string;
+  endTime: string;
 }
 
 export type Visit = {
-  VisitID: number;
-  ScheduleID: number;
-  DoctorID: number;
-  Doctor: Doctor;
-  StartTime: string;
-  EndTime: string;
+  visitID: number;
+  scheduleID: number;
+  schedule: Schedule;
+  patientID: number;
+  patient: Patient;
+  startTime: string;
+  endTime: string;
+  description: string;
+}
+
+export type SchVisQuery = {
+  startDate: string;
+  endDate: string;
+  specID: number;
+  searched: boolean;
 }

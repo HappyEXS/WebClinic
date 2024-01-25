@@ -1,6 +1,8 @@
 import ListGroup from "../components/ListGroup";
 import Button from "../components/Button";
 import { Speciality } from "../shared/types";
+import React, { useState, useEffect } from "react";
+import { SpecialityService } from "../services/SpecialityService";
 
 interface Props {
   specialities: Speciality[];
@@ -27,7 +29,7 @@ function Specialities({ specialities }: Props) {
           <tbody>
             {specialities.map((spec) => (
               <tr className="speciality-item">
-                <td className="table-item">{spec.specialityId}</td>
+                <td className="table-item">{spec.specialityID}</td>
                 <td className="table-item">{spec.name}</td>
               </tr>
             ))}
