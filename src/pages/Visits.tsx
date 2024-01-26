@@ -5,12 +5,12 @@ import SearchBox from "../components/SearchBox";
 
 interface Props {
   userType: string;
-  userId: number;
+  userID: number;
   specialities: Speciality[];
 }
 
-const Visits = ({ userType, userId, specialities }: Props) => {
-  let timeNow = "10:25";
+const Visits = ({ userType, userID, specialities }: Props) => {
+  let timeNow = Date.now.toString();
   let patientActive = true;
   const [openModal, setOpenModal] = useState(false);
   const [selectedSpeciality, setSelectedSpeciality] = useState(-1);
@@ -91,7 +91,8 @@ const Visits = ({ userType, userId, specialities }: Props) => {
                   {visit.startTime.substring(11, 16)}
                 </td>
                 {userType === "patient" ? (
-                  visit.startTime < timeNow || patientActive === false ? (
+                  //visit.startTime < timeNow ||
+                  patientActive === false ? (
                     <td className="table-item">
                       <a className="btn btn-outline-dark" onClick={() => null}>
                         Sign up
@@ -99,12 +100,15 @@ const Visits = ({ userType, userId, specialities }: Props) => {
                     </td>
                   ) : (
                     <td className="table-item">
-                      <button
+                      <a
                         className="btn btn-outline-success"
-                        onClick={() => setOpenModal(true)}
+                        onClick={() => {
+                          VisitService.addPatient(visit.visitID, userID);
+                          retriveVisits();
+                        }}
                       >
                         Sign up
-                      </button>
+                      </a>
                     </td>
                   )
                 ) : (
@@ -115,31 +119,6 @@ const Visits = ({ userType, userId, specialities }: Props) => {
           </tbody>
         </table>
       </div>
-      {/* <Modal
-        show={openModal}
-        size="max-w-sm"
-        position="center"
-        onClose={() => setOpenModal(false)}
-        popup
-      >
-        <ModalHeader>confirm reservation</ModalHeader>
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => setOpenModal(false)}>
-                {"Yes, I'm sure"}
-              </Button>
-              <Button color="gray" onClick={() => setOpenModal(false)}>
-                No, cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal> */}
     </>
   );
 };

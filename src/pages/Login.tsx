@@ -20,6 +20,10 @@ const Login = ({ setLogged, setUserId, setUserType }: Props) => {
     let path = `/dashboard`;
     navigate(path);
   };
+  const routeChangePatient = () => {
+    let path = `/dashboard/patient`;
+    navigate(path);
+  };
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     setPost({ ...post, [event.target.name]: event.target.value });
@@ -32,7 +36,12 @@ const Login = ({ setLogged, setUserId, setUserType }: Props) => {
         setLogged(true);
         setUserId(response.data.userID);
         setUserType(response.data.userType);
-        routeChange();
+        if (response.data.userType === "patient") {
+          routeChangePatient();
+        } else {
+          routeChange();
+        }
+
         console.log(response);
       })
       .catch((e: Error) => {
@@ -72,7 +81,7 @@ const Login = ({ setLogged, setUserId, setUserType }: Props) => {
         </button>
       </div>
 
-      <div className="login-footer" onClick={handleSubmit}>
+      <div className="login-footer">
         <p>{message}</p>
       </div>
     </>

@@ -18,7 +18,7 @@ const ScheduleCreate = () => {
   };
 
   const handleSubmit = () => {
-    post.doctorID = doctors[selectedID].doctorID;
+    post.doctorID = doctors[selectedID - 1].doctorID;
     console.log(post);
     ScheduleService.create(post)
       .then((response: any) => {

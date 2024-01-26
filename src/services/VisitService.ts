@@ -9,27 +9,28 @@ const postQuery = (query: SchVisQuery) => {
     return http.post<Array<Visit>>('/visit', query)
 }
 
-const get = (visitID: any) => {
+const get = (visitID: number) => {
     return http.get<Array<Visit>>(`/visit/${visitID}`)
 }
 
-const getForPatient = (patientID: any) => {
+const getForPatient = (patientID: number) => {
     return http.get<Array<Visit>>(`/visit/patient/${patientID}`)
 }
 
-const getForDoctor = (doctorID: any) => {
+const getForDoctor = (doctorID: number) => {
     return http.get<Array<Visit>>(`/visit/doctor/${doctorID}`)
 }
 
-const setDescription = (visitID: any, description: string) => {
+const setDescription = (visitID: number, description: string) => {
     return http.post<any>(`/visit/description/${visitID}?description=${description}`)
 }
 
-const setPatent = (visitID: any, patientID: string) => {
-    return http.post<any>(`/visit/addpatient/${visitID}?patientID=${patientID}`)
+const addPatient = (visitID: number, patientID: number) => {
+    console.log(visitID, patientID)
+    return http.post<any>(`/visit/addPatient/${visitID}?patientID=${patientID}`)
 }
 
-const deletePatient = (visitID: any) => {
+const deletePatient = (visitID: number) => {
     return http.post<any>(`/visit/deletepatient/${visitID}`)
 }
 
@@ -40,6 +41,6 @@ export const VisitService = {
     getForPatient,
     getForDoctor,
     setDescription,
-    setPatent,
+    addPatient,
     deletePatient
   };

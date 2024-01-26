@@ -13,8 +13,8 @@ const create = (doctor: any) => {
     return http.post<any>('/doctor', doctor)
 }
 
-const update = (doctor: Doctor) => {
-    return http.put<any>('/doctor', doctor)
+const update = (doctorID: number, doctor: any) => {
+    return http.put<any>(`/doctor/${doctorID}`, doctor)
 }
 
 const remove = (doctorID: any) => {

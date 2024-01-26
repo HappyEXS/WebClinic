@@ -82,7 +82,14 @@ const Navbar = ({
               {logged ? (
                 <>
                   <li className="nav-item">
-                    <Link className="nav-link active" to="/dashboard">
+                    <Link
+                      className="nav-link active"
+                      to={
+                        userType === "patient"
+                          ? "/dashboard/patient"
+                          : "/dashboard"
+                      }
+                    >
                       Dashboard
                     </Link>
                   </li>

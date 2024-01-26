@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Doctor, Visit } from "../shared/types";
-import { DoctorService } from "../services/DoctorService";
+import { Patient, Visit } from "../shared/types";
+import { PatientService } from "../services/PatientService";
 import { VisitService } from "../services/VisitService";
 import { Link } from "react-router-dom";
 
@@ -8,19 +8,19 @@ interface Props {
   userID: number;
 }
 
-const Dashboard = ({ userID }: Props) => {
-  const [doctor, setDoctor] = useState<Doctor>();
+const DashboardPatient = ({ userID }: Props) => {
+  const [patient, setPatient] = useState<Patient>();
   const [visits, setVisits] = useState<Array<Visit>>([]);
 
   useEffect(() => {
-    retriveDoctor();
+    retrivePatient();
     retriveVisits();
   }, []);
 
-  const retriveDoctor = () => {
-    DoctorService.get(userID)
+  const retrivePatient = () => {
+    PatientService.get(userID)
       .then((response: any) => {
-        setDoctor(response.data as Doctor);
+        setPatient(response.data as Patient);
         console.log(response.data);
       })
       .catch((e: Error) => {
@@ -29,7 +29,7 @@ const Dashboard = ({ userID }: Props) => {
   };
 
   const retriveVisits = () => {
-    VisitService.getForDoctor(userID)
+    VisitService.getForPatient(userID)
       .then((response: any) => {
         setVisits(response.data as Visit[]);
         console.log(response.data);
@@ -39,9 +39,12 @@ const Dashboard = ({ userID }: Props) => {
       });
   };
 
+  const handelCancelVisit = (visitID: number) => {
+    VisitService.deletePatient(visitID).then().catch();
+  };
   return (
     <>
-      <h1 className="dashboard-header">Doctor's Dashboard</h1>
+      <h1 className="dashboard-header">Patient's Dashboard</h1>
 
       <table className="table-header">
         <tr>
@@ -49,7 +52,7 @@ const Dashboard = ({ userID }: Props) => {
             <h3>Your information</h3>
           </td>
           <td className="tab-last">
-            <Link className="btn btn-outline-secondary" to="/doctors/edit">
+            <Link className="btn btn-outline-secondary" to="/patients/edit">
               Edit info
             </Link>
           </td>
@@ -60,7 +63,6 @@ const Dashboard = ({ userID }: Props) => {
         <table className="main-table">
           <thead className="main-head">
             <tr className="table-row">
-              <th className="table-item">ID</th>
               <th className="table-item">Last Name</th>
               <th className="table-item">First Name</th>
               <th className="table-item">Birth Date</th>
@@ -70,51 +72,57 @@ const Dashboard = ({ userID }: Props) => {
           </thead>
           <tbody className="doctor-body">
             <tr className="table-row">
-              <td className="table-item">{doctor?.doctorID}</td>
-              <td className="table-item">{doctor?.name}</td>
-              <td className="table-item">{doctor?.surname}</td>
+              <td className="table-item">{patient?.surname}</td>
+              <td className="table-item">{patient?.name}</td>
               <td className="table-item">
-                {doctor?.dateOfBirth.substring(0, 10)}
+                {patient?.dateOfBirth.substring(0, 10)}
               </td>
-              <td className="table-item">{doctor?.email}</td>
-              <td className="table-item">{doctor?.password}</td>
+              <td className="table-item">{patient?.email}</td>
+              <td className="table-item">{patient?.password}</td>
             </tr>
           </tbody>
         </table>
+        {patient?.isActive === false && (
+          <>
+            <h5 className="mt-4">This account is inactive. </h5>
+            <p>
+              You can sign up for visits after account is verified by
+              supervisor. If you need any information, please contact
+              administrator.
+            </p>
+          </>
+        )}
       </div>
 
-      <div className="go-back-btn">
-        <a
-          asp-action="Schedule"
-          className="btn btn-outline-primary"
-          asp-route-doctorId="@Model.DoctorID"
-          asp-route-weekStart="@Model.getLastMonday()"
-        >
-          View Schedule
-        </a>
-      </div>
-
-      <h3 className="mt-4">Patient visits</h3>
+      <h3 className="mt-4">Visits to doctors</h3>
       <hr />
 
       <div className="main-body">
         <table className="main-table">
           <thead className="main-head">
             <tr className="table-row">
-              <th className="table-item">Patient's Name</th>
+              <th className="table-item">Doctor's Name</th>
+              <th className="table-item">Speciality</th>
               <th className="table-item">Date</th>
               <th className="table-item">Day of the Week</th>
               <th className="table-item">Begins at</th>
-              <th className="table-item">Edit Description</th>
+              <th className="table-item">Details</th>
+              <th className="table-item">Cancel</th>
             </tr>
           </thead>
           <tbody className="visit-body">
             {visits.map((visit) => (
               <tr className="table-row">
                 <td className="table-item">
-                  {visit.patient.name + " " + visit.patient.surname}
+                  {visit.schedule.doctor.name +
+                    " " +
+                    visit.schedule.doctor.surname}
                 </td>
                 <td className="table-item">
+                  {visit.schedule.doctor.speciality.name}
+                </td>
+                <td className="table-item">
+                  {" "}
                   {visit.schedule.startTime.substring(0, 10)}
                 </td>
                 <td className="table-item">{visit.schedule.startTime}</td>
@@ -122,12 +130,14 @@ const Dashboard = ({ userID }: Props) => {
                   {visit.schedule.startTime.substring(11, 16)}
                 </td>
                 <td className="table-item">
+                  <a className="btn btn-outline-info">Details</a>
+                </td>
+                <td className="table-item">
                   <a
-                    asp-action="EditDescription"
-                    className="btn btn-outline-primary"
-                    asp-route-visitID="@visit.VisitID"
+                    className="btn btn-outline-danger"
+                    onClick={() => handelCancelVisit(visit.visitID)}
                   >
-                    Edit
+                    Cancel
                   </a>
                 </td>
               </tr>
@@ -139,4 +149,4 @@ const Dashboard = ({ userID }: Props) => {
   );
 };
 
-export default Dashboard;
+export default DashboardPatient;

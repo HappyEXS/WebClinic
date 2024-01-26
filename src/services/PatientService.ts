@@ -5,7 +5,7 @@ const getAll = () => {
     return http.get<Array<Patient>>('/patient')
 }
 
-const get = (patientID: any) => {
+const get = (patientID: number) => {
     return http.get<Patient>(`/patient/${patientID}`)
 }
 
@@ -13,19 +13,19 @@ const create = (patient: any) => {
     return http.post<any>(`/patient`, patient)
 }
 
-const update = (patient: Patient) => {
-    return http.put<any>(`/patient`, patient)
+const update = (patientID: number, patient: any) => {
+    return http.put<any>(`/patient/${patientID}`, patient)
 }
 
-const remove = (patientID: any) => {
+const remove = (patientID: number) => {
     return http.delete<any>(`/patient/${patientID}`)
   };
 
-const activate = (patientID: any) => {
+const activate = (patientID: number) => {
     return http.post<any>(`/patient/activate/${patientID}`)
   };
 
-const disactivate = (patientID: any) => {
+const disactivate = (patientID: number) => {
     return http.post<any>(`/patient/disactivate/${patientID}`)
   };
 

@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import DashboardPatient from "./pages/DashboardPatient";
 import Specialities from "./pages/Specialities";
 import Schedules from "./pages/Schedules";
 import Visits from "./pages/Visits";
@@ -20,6 +21,8 @@ import { Speciality } from "./shared/types";
 import "./App.css";
 import DoctorCreate from "./pages/DoctorCreate";
 import ScheduleCreate from "./pages/ScheduleCreate";
+import DoctorEdit from "./pages/DoctorEdit";
+import PatientEdit from "./pages/PatientEdit";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<CurrentPage>(CurrentPage.Home);
@@ -84,9 +87,10 @@ function App() {
                 }
               />
               <Route path="reg" element={<Register />} />
+              <Route path="dashboard" element={<Dashboard userID={userId} />} />
               <Route
-                path="dashboard"
-                element={<Dashboard userID={userId} userType={userType} />}
+                path="dashboard/patient"
+                element={<DashboardPatient userID={userId} />}
               />
               <Route
                 path="schedule"
@@ -104,7 +108,7 @@ function App() {
                 element={
                   <Visits
                     userType={userType}
-                    userId={userId}
+                    userID={userId}
                     specialities={specialities}
                   />
                 }
@@ -114,7 +118,15 @@ function App() {
                 path="doctors/create"
                 element={<DoctorCreate specialities={specialities} />}
               />
+              <Route
+                path="doctors/edit"
+                element={<DoctorEdit userID={userId} />}
+              />
               <Route path="patients" element={<Patients />} />
+              <Route
+                path="patients/edit"
+                element={<PatientEdit userID={userId} />}
+              />
             </Routes>
           </main>
         </div>
