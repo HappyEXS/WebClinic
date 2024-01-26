@@ -3,9 +3,24 @@ import { Link } from "react-router-dom";
 interface Props {
   logged: boolean;
   userType: string;
+  setLogged: (boolean: boolean) => void;
+  setUserId: (string: number) => void;
+  setUserType: (string: string) => void;
 }
 
-const Navbar = ({ logged, userType }: Props) => {
+const Navbar = ({
+  logged,
+  userType,
+  setLogged,
+  setUserId,
+  setUserType,
+}: Props) => {
+  const logoutUser = () => {
+    setLogged(false);
+    setUserId(-1);
+    setUserType("");
+  };
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -72,7 +87,11 @@ const Navbar = ({ logged, userType }: Props) => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link active" to="/">
+                    <Link
+                      className="nav-link active"
+                      to="/"
+                      onClick={logoutUser}
+                    >
                       Logout
                     </Link>
                   </li>

@@ -1,3 +1,4 @@
+import { useState, ChangeEvent } from "react";
 import { Speciality, SchVisQuery } from "../shared/types";
 
 interface Props {
@@ -7,9 +8,16 @@ interface Props {
 }
 
 const SearchBox = ({ specialities, query, setQuery }: Props) => {
-  function handleSubmit(e) {
-    e.preventDefault();
-  }
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery({ ...query, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = () => {
+    query.specID = specialities[selectedID].specialityID;
+    query.searched = true;
+  };
+
+  const [selectedID, setSelectedID] = useState(-1);
 
   return (
     <>
@@ -20,7 +28,12 @@ const SearchBox = ({ specialities, query, setQuery }: Props) => {
               <td className="table-item">
                 <label>
                   Speciality
-                  <select className="form-control">
+                  <select
+                    className="form-control"
+                    onChange={(event) =>
+                      setSelectedID(event.target.options.selectedIndex)
+                    }
+                  >
                     <option value={-1}>--all--</option>
                     {specialities.map((speciality, index) =>
                       speciality.specialityID === query.specID ? (
@@ -48,9 +61,7 @@ const SearchBox = ({ specialities, query, setQuery }: Props) => {
                     type="date"
                     value={query.startDate}
                     className="form-control"
-                    onChange={(e) =>
-                      (query.startDate = new Date(e.target.value).toString())
-                    }
+                    onChange={handleInput}
                   />
                 </label>
               </td>
@@ -61,9 +72,7 @@ const SearchBox = ({ specialities, query, setQuery }: Props) => {
                     type="date"
                     value={query.endDate}
                     className="form-control"
-                    onChange={(e) =>
-                      (query.endDate = new Date(e.target.value).toString())
-                    }
+                    onChange={handleInput}
                   />
                 </label>
               </td>

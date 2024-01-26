@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface Props {
   logged: boolean;
 }
@@ -48,22 +50,22 @@ const Home = ({ logged }: Props) => {
       <hr />
       {!logged && (
         <div id="home-btns">
-          <button
+          <Link
             type="button"
             className="btn btn-primary"
             id="button"
-            onClick={() => null}
+            to="/login"
           >
             Log In to our web service
-          </button>
-          <button
+          </Link>
+          <Link
             type="button"
             className="btn btn-secondary"
             id="button"
-            onClick={() => null}
+            to="/reg"
           >
             Create a new account
-          </button>
+          </Link>
         </div>
       )}
     </div>

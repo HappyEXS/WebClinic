@@ -1,60 +1,43 @@
+import React, { useState, useEffect } from "react";
+import { Doctor, Visit } from "../shared/types";
+import { DoctorService } from "../services/DoctorService";
+import { VisitService } from "../services/VisitService";
+
 interface Props {
+  userID: number;
   userType: string;
-  userId: number;
 }
 
-const Dashboard = () => {
-  let doctor = {
-    doctorId: 101,
-    lastName: "Kiler",
-    firstName: "Jurek",
-    birthDate: "10-01-2024",
-    email: "asdfas@gmail.com",
-    password: "passwd1234",
-    speciality: "laryngolog",
+const Dashboard = ({ userID, userType }: Props) => {
+  const [doctor, setDoctor] = useState<Doctor>();
+  const [visits, setVisits] = useState<Array<Visit>>([]);
+
+  useEffect(() => {
+    retriveDoctor();
+    retriveVisits();
+  }, []);
+
+  const retriveDoctor = () => {
+    DoctorService.get(userID)
+      .then((response: any) => {
+        setDoctor(response.data as Doctor);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
   };
-  let visits = [
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      patientName: "qwrqrq",
-      date: "10-01-2024",
-      dayOfWeek: "Monday",
-      startHour: "9:00",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      patientName: "qwee",
-      date: "10-01-2024",
-      dayOfWeek: "Monday",
-      startHour: "9:15",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      patientName: "qwrr",
-      date: "10-01-2024",
-      dayOfWeek: "Monday",
-      startHour: "9:30",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      patientName: "qwrrt",
-      date: "12-01-2024",
-      dayOfWeek: "Wednesday",
-      startHour: "9:00",
-    },
-    {
-      doctorName: "Jurek Kiler",
-      doctorSpeciality: "laryngolog",
-      patientName: "asdf",
-      date: "15-01-2024",
-      dayOfWeek: "Saturday",
-      startHour: "9:00",
-    },
-  ];
+
+  const retriveVisits = () => {
+    VisitService.getForDoctor(userID)
+      .then((response: any) => {
+        setVisits(response.data as Visit[]);
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -91,12 +74,14 @@ const Dashboard = () => {
           </thead>
           <tbody className="doctor-body">
             <tr className="table-row">
-              <td className="table-item">{doctor.doctorId}</td>
-              <td className="table-item">{doctor.lastName}</td>
-              <td className="table-item">{doctor.firstName}</td>
-              <td className="table-item">{doctor.birthDate}</td>
-              <td className="table-item">{doctor.email}</td>
-              <td className="table-item">{doctor.password}</td>
+              <td className="table-item">{doctor?.doctorID}</td>
+              <td className="table-item">{doctor?.name}</td>
+              <td className="table-item">{doctor?.surname}</td>
+              <td className="table-item">
+                {doctor?.dateOfBirth.substring(0, 10)}
+              </td>
+              <td className="table-item">{doctor?.email}</td>
+              <td className="table-item">{doctor?.password}</td>
             </tr>
           </tbody>
         </table>
@@ -130,10 +115,16 @@ const Dashboard = () => {
           <tbody className="visit-body">
             {visits.map((visit) => (
               <tr className="table-row">
-                <td className="table-item">{visit.patientName}</td>
-                <td className="table-item">{visit.date}</td>
-                <td className="table-item">{visit.dayOfWeek}</td>
-                <td className="table-item">{visit.startHour}</td>
+                <td className="table-item">
+                  {visit.patient.name + " " + visit.patient.surname}
+                </td>
+                <td className="table-item">
+                  {visit.schedule.startTime.substring(0, 10)}
+                </td>
+                <td className="table-item">{visit.schedule.startTime}</td>
+                <td className="table-item">
+                  {visit.schedule.startTime.substring(11, 16)}
+                </td>
                 <td className="table-item">
                   <a
                     asp-action="EditDescription"

@@ -27,10 +27,10 @@ const Visits = ({ userType, userId, specialities }: Props) => {
   const [visits, setVisits] = useState<Array<Visit>>([]);
 
   useEffect(() => {
-    retriveSchedules();
+    retriveVisits();
   }, []);
 
-  const retriveSchedules = () => {
+  const retriveVisits = () => {
     VisitService.getAll()
       .then((response: any) => {
         setVisits(response.data as Visit[]);

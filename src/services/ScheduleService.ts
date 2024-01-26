@@ -9,12 +9,12 @@ const getQuery = (query: SchVisQuery) => {
     return http.post<Array<Schedule>>('/schedule', query)
 }
 
-const create = (schedule: Schedule) => {
-    return http.post<Array<Schedule>>('/schedule/create', schedule)
+const create = (schedule: any) => {
+    return http.post<any>('/schedule/create', schedule)
 }
 
 const remove = (scheduleID: any) => {
-    return http.delete<Array<Schedule>>('/schedule/${scheduleID}')
+    return http.delete<any>(`/schedule/${scheduleID}`)
   };
 
 export const ScheduleService = {

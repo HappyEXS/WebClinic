@@ -58,29 +58,34 @@ function Patients() {
                 <td className="table-item">{patient.isActive.toString()}</td>
                 <td className="table-item">
                   <a
-                    asp-action="Activate"
                     className="btn btn-outline-primary"
                     id="button-table"
-                    asp-route-patientId="@patient.PatientID"
+                    onClick={() => {
+                      PatientService.activate(patient.patientID);
+                      retrivePatients();
+                    }}
                   >
                     Activate
                   </a>
                   <a
-                    asp-action="Disactivate"
                     className="btn btn-outline-secondary"
                     id="button-table"
-                    asp-route-patientId="@patient.PatientID"
+                    onClick={() => {
+                      PatientService.disactivate(patient.patientID);
+                      retrivePatients();
+                    }}
                   >
                     Disactivate
                   </a>
                 </td>
                 <td className="table-item">
                   <a
-                    asp-action="Delete"
                     className="btn btn-outline-danger"
                     id="button-table"
-                    asp-route-patientId="@patient.PatientID"
-                    onClick={() => null}
+                    onClick={() => {
+                      PatientService.remove(patient.patientID);
+                      retrivePatients();
+                    }}
                   >
                     Delete
                   </a>

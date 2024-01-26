@@ -1,46 +1,79 @@
-import { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
+import { LoginService } from "../services/LoginService";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+interface Props {
+  setLogged: (boolean: boolean) => void;
+  setUserId: (string: number) => void;
+  setUserType: (string: string) => void;
+}
+
+const Login = ({ setLogged, setUserId, setUserType }: Props) => {
+  const [message, setMessage] = useState("");
+  const [post, setPost] = useState({
+    email: "",
+    password: "",
+  });
+
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `/dashboard`;
+    navigate(path);
+  };
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setPost({ ...post, [event.target.name]: event.target.value });
+  };
+
+  function handleSubmit() {
+    console.log(post);
+    LoginService.login(post)
+      .then((response: any) => {
+        setLogged(true);
+        setUserId(response.data.userID);
+        setUserType(response.data.userType);
+        routeChange();
+        console.log(response);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+        setMessage("Incorrect email or password");
+      });
+  }
 
   return (
     <>
-      <h1>Log in to the employee account</h1>
+      <h1>Log in to the account</h1>
 
-      <p>Provide the login data given by the director of the WebClinic</p>
+      <p>Provide a valid login data for the WebClinic</p>
       <div className="form-body">
-        <form method="post">
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            name="email"
+            onChange={handleInput}
+          />
+        </div>
 
-          <div className="mb-3">
-            <label className="form-label">Password</label>
-            <input
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            name="password"
+            onChange={handleInput}
+          />
+        </div>
 
-          <button type="submit" className="btn btn-primary">
-            Log in
-          </button>
-        </form>
+        <button className="btn btn-primary" onClick={handleSubmit}>
+          Log in
+        </button>
       </div>
 
-      <div className="login-footer">
-        <p>
-          Log in as an patient <a href="/Patient/Login">here</a>
-        </p>
+      <div className="login-footer" onClick={handleSubmit}>
+        <p>{message}</p>
       </div>
     </>
   );

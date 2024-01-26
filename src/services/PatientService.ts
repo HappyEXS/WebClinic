@@ -6,19 +6,27 @@ const getAll = () => {
 }
 
 const get = (patientID: any) => {
-    return http.get<Array<Patient>>('/patient/${patientID}')
+    return http.get<Patient>(`/patient/${patientID}`)
 }
 
-const create = (patient: Patient) => {
-    return http.post<Array<Patient>>('/patient', patient)
+const create = (patient: any) => {
+    return http.post<any>(`/patient`, patient)
 }
 
 const update = (patient: Patient) => {
-    return http.put<Array<Patient>>('/patient', patient)
+    return http.put<any>(`/patient`, patient)
 }
 
 const remove = (patientID: any) => {
-    return http.delete<Array<Patient>>('/patient/${patientID}')
+    return http.delete<any>(`/patient/${patientID}`)
+  };
+
+const activate = (patientID: any) => {
+    return http.post<any>(`/patient/activate/${patientID}`)
+  };
+
+const disactivate = (patientID: any) => {
+    return http.post<any>(`/patient/disactivate/${patientID}`)
   };
 
 export const PatientService = {
@@ -26,5 +34,7 @@ export const PatientService = {
     get,
     create,
     update,
-    remove
+    remove,
+    activate,
+    disactivate
   };

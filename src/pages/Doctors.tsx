@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Doctor } from "../shared/types";
 import { DoctorService } from "../services/DoctorService";
+import { useNavigate } from "react-router-dom";
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState<Array<Doctor>>([]);
@@ -8,6 +9,12 @@ const Doctors = () => {
   useEffect(() => {
     retriveDoctors();
   }, []);
+
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `/doctors/create`;
+    navigate(path);
+  };
 
   const retriveDoctors = () => {
     DoctorService.getAll()
@@ -32,7 +39,7 @@ const Doctors = () => {
               type="submit"
               className="btn btn-primary"
               id="button"
-              onClick={() => null}
+              onClick={routeChange}
             >
               Create new doctor account
             </button>
@@ -65,31 +72,21 @@ const Doctors = () => {
                 </td>
                 <td className="table-item">{doctor.speciality.name}</td>
                 <td className="table-item">
-                  <a
-                    asp-action="Schedule"
-                    className="btn btn-outline-primary"
-                    id="button-table"
-                    asp-route-doctorId="@doctor.DoctorID"
-                    asp-route-weekStart="@doctor.getLastMonday()"
-                  >
+                  <a className="btn btn-outline-primary" id="button-table">
                     Schedule
                   </a>
                 </td>
                 <td className="table-item">
-                  <a
-                    asp-action="Edit"
-                    className="btn btn-outline-secondary"
-                    id="button-table"
-                    asp-route-doctorId="@doctor.DoctorID"
-                  >
+                  <a className="btn btn-outline-secondary" id="button-table">
                     Edit
                   </a>
                   <a
-                    asp-action="Delete"
                     className="btn btn-outline-danger"
                     id="button-table"
-                    asp-route-doctorId="@doctor.DoctorID"
-                    onClick={() => null}
+                    onClick={() => {
+                      DoctorService.remove(doctor.doctorID);
+                      retriveDoctors();
+                    }}
                   >
                     Delete
                   </a>

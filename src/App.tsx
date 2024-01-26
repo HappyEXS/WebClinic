@@ -18,12 +18,14 @@ import React, { useState, useEffect } from "react";
 import { SpecialityService } from "./services/SpecialityService";
 import { Speciality } from "./shared/types";
 import "./App.css";
+import DoctorCreate from "./pages/DoctorCreate";
+import ScheduleCreate from "./pages/ScheduleCreate";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<CurrentPage>(CurrentPage.Home);
 
   const [showAlert, setShowAlert] = useState(false);
-  const [logged, setLogged] = useState(true);
+  const [logged, setLogged] = useState(false);
   const [userId, setUserId] = useState(-1);
   const [userType, setUserType] = useState("director");
 
@@ -53,7 +55,13 @@ function App() {
       </head>
       <body id="body">
         <header>
-          <Navbar logged={logged} userType={userType}></Navbar>
+          <Navbar
+            logged={logged}
+            userType={userType}
+            setLogged={setLogged}
+            setUserId={setUserId}
+            setUserType={setUserType}
+          ></Navbar>
         </header>
 
         <div className="container">
@@ -65,15 +73,28 @@ function App() {
             )}
             <Routes>
               <Route path="/" element={<Home logged={logged} />} />
-              <Route path="login" element={<Login />} />
+              <Route
+                path="login"
+                element={
+                  <Login
+                    setLogged={setLogged}
+                    setUserId={setUserId}
+                    setUserType={setUserType}
+                  />
+                }
+              />
               <Route path="reg" element={<Register />} />
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route
+                path="dashboard"
+                element={<Dashboard userID={userId} userType={userType} />}
+              />
               <Route
                 path="schedule"
                 element={
                   <Schedules userType={userType} specialities={specialities} />
                 }
               />
+              <Route path="schedule/create" element={<ScheduleCreate />} />
               <Route
                 path="specialities"
                 element={<Specialities specialities={specialities} />}
@@ -89,6 +110,10 @@ function App() {
                 }
               />
               <Route path="doctors" element={<Doctors />} />
+              <Route
+                path="doctors/create"
+                element={<DoctorCreate specialities={specialities} />}
+              />
               <Route path="patients" element={<Patients />} />
             </Routes>
           </main>

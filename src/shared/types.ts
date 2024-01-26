@@ -55,6 +55,7 @@ export type Visit = {
   startTime: string;
   endTime: string;
   description: string;
+  available: boolean;
 }
 
 export type SchVisQuery = {

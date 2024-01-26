@@ -6,19 +6,19 @@ const getAll = () => {
 }
 
 const get = (doctorID: any) => {
-    return http.get<Array<Doctor>>('/doctor/${doctorID}')
+    return http.get<Doctor>(`/doctor/${doctorID}`)
 }
 
-const create = (doctor: Doctor) => {
-    return http.post<Array<Doctor>>('/doctor', doctor)
+const create = (doctor: any) => {
+    return http.post<any>('/doctor', doctor)
 }
 
 const update = (doctor: Doctor) => {
-    return http.put<Array<Doctor>>('/doctor', doctor)
+    return http.put<any>('/doctor', doctor)
 }
 
 const remove = (doctorID: any) => {
-    return http.delete<Array<Doctor>>('/doctor/${doctorID}')
+    return http.delete<any>(`/doctor/${doctorID}`)
   };
 
 export const DoctorService = {

@@ -1,22 +1,25 @@
 import { useState, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { PatientService } from "../services/PatientService";
-import { Link } from "react-router-dom";
+import { DoctorService } from "../services/DoctorService";
+import { Speciality } from "../shared/types";
 
-const Register = () => {
-  const [message, setMessage] = useState("");
+interface Props {
+  specialities: Speciality[];
+}
 
+const DoctorCreate = ({ specialities }: Props) => {
   const [post, setPost] = useState({
     name: "",
     surname: "",
     dateOfBirth: "",
     email: "",
     password: "",
+    specialityID: -1,
   });
 
   let navigate = useNavigate();
   const routeChange = () => {
-    let path = `/login`;
+    let path = `/doctors`;
     navigate(path);
   };
 
@@ -25,7 +28,9 @@ const Register = () => {
   };
 
   const handleSubmit = () => {
-    PatientService.create(post)
+    post.specialityID = selectedID;
+    console.log(post);
+    DoctorService.create(post)
       .then((response: any) => {
         routeChange();
         console.log(response.data);
@@ -35,9 +40,11 @@ const Register = () => {
       });
   };
 
+  const [selectedID, setSelectedID] = useState(-1);
+
   return (
     <>
-      <h1>Create new patient account</h1>
+      <h1>Create new doctor account</h1>
 
       <hr />
       <h5>Submit your information to create an account</h5>
@@ -108,40 +115,54 @@ const Register = () => {
             onChange={handleInput}
           />
         </div>
-
-        {/* <div className="mb-3">
-            <label className="form-check-label">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="remember"
-                required
+        <table className="mb-3">
+          <tr className="tab-row">
+            <td className="table-item">
+              <label className="form-label">Speciality</label>
+            </td>
+            <td className="table-item">
+              <select
+                className="form-control"
+                onChange={(event) =>
+                  setSelectedID(event.target.options.selectedIndex)
+                }
               >
-                {" "}
-                I agree on terms of use.
-              </input>
-              <div className="valid-feedback">Valid.</div>
-              <div className="invalid-feedback">
-                Check this checkbox to continue.
-              </div>
-            </label>
-          </div> */}
+                <option value={-1}>----</option>
+                {specialities.map((speciality, index) =>
+                  speciality.specialityID === post.specialityID ? (
+                    <option value={speciality.specialityID} selected>
+                      {speciality.name}
+                    </option>
+                  ) : (
+                    <option value={speciality.specialityID}>
+                      {speciality.name}
+                    </option>
+                  )
+                )}
+              </select>
+            </td>
+          </tr>
+        </table>
 
-        <div className="mb-3">
+        <div className="mb-2">
           <button
             id="button"
             className="btn btn-primary"
             onClick={handleSubmit}
           >
-            Register
+            Create
           </button>
-          <Link id="button" className="btn btn-secondary" to="/">
-            Home
-          </Link>
+          <button
+            id="button"
+            className="btn btn-secondary"
+            onClick={routeChange}
+          >
+            Go back
+          </button>
         </div>
       </div>
     </>
   );
 };
 
-export default Register;
+export default DoctorCreate;

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Schedule, Speciality, SchVisQuery } from "../shared/types";
 import { ScheduleService } from "../services/ScheduleService";
-
+import { useNavigate } from "react-router-dom";
 import SearchBox from "../components/SearchBox";
-import { ListGroup } from "flowbite-react";
 
 interface Props {
   userType: string;
@@ -40,6 +39,12 @@ function Schedules({ specialities, userType }: Props) {
       });
   };
 
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `/schedule/create`;
+    navigate(path);
+  };
+
   return (
     <>
       <table className="table-header">
@@ -52,7 +57,7 @@ function Schedules({ specialities, userType }: Props) {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onClick={() => null}
+                onClick={routeChange}
               >
                 Add new schedule
               </button>
@@ -79,7 +84,7 @@ function Schedules({ specialities, userType }: Props) {
             </tr>
           </thead>
           <tbody className="schedule-body">
-            {schedules.length === 0 && <p>No schedules found</p>}
+            {schedules.length === 0 && <tr>No schedules found</tr>}
             {schedules.map((schedule, index) => (
               <tr className="table-row">
                 <td className="table-item">
