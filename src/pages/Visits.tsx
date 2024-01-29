@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Visit, Speciality, SchVisQuery } from "../shared/types";
+import { Visit, Speciality, SchVisQuery, days } from "../shared/types";
 import { VisitService } from "../services/VisitService";
 import SearchBox from "../components/SearchBox";
 
@@ -10,16 +10,12 @@ interface Props {
 }
 
 const Visits = ({ userType, userID, specialities }: Props) => {
-  let timeNow = Date.now.toString();
+  let timeNow = new Date();
   let patientActive = true;
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedSpeciality, setSelectedSpeciality] = useState(-1);
-  const [startDate, setStartDate] = useState(new Date("2024-01-01"));
-  const [endDate, setEndDate] = useState(new Date("2024-02-01"));
 
   let q: SchVisQuery = {
-    startDate: "",
-    endDate: "",
+    startDate: new Date().toString(),
+    endDate: new Date(new Date().setDate(new Date().getDate() + 7)).toString(),
     specID: -1,
     searched: false,
   };
@@ -27,13 +23,38 @@ const Visits = ({ userType, userID, specialities }: Props) => {
   const [visits, setVisits] = useState<Array<Visit>>([]);
 
   useEffect(() => {
-    retriveVisits();
-  }, []);
+    retriveVisitsWithQuery();
+  }, [visits, query]);
 
   const retriveVisits = () => {
     VisitService.getAll()
       .then((response: any) => {
-        setVisits(response.data as Visit[]);
+        let res = response.data;
+        res.sort((a: Visit, b: Visit) => {
+          return (
+            new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+          );
+        });
+        setVisits(res as Visit[]);
+
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+
+  const retriveVisitsWithQuery = () => {
+    VisitService.postQuery(query)
+      .then((response: any) => {
+        let res = response.data;
+        res.sort((a: Visit, b: Visit) => {
+          return (
+            new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+          );
+        });
+        setVisits(res as Visit[]);
+
         console.log(response.data);
       })
       .catch((e: Error) => {
@@ -86,12 +107,14 @@ const Visits = ({ userType, userID, specialities }: Props) => {
                 <td className="table-item">
                   {visit.startTime.substring(0, 10)}
                 </td>
-                <td className="table-item">{visit.startTime}</td>
+                <td className="table-item">
+                  {days[new Date(visit.startTime).getDay()]}
+                </td>
                 <td className="table-item">
                   {visit.startTime.substring(11, 16)}
                 </td>
                 {userType === "patient" ? (
-                  //visit.startTime < timeNow ||
+                  new Date(visit.startTime) < timeNow ||
                   patientActive === false ? (
                     <td className="table-item">
                       <a className="btn btn-outline-dark" onClick={() => null}>
@@ -104,7 +127,7 @@ const Visits = ({ userType, userID, specialities }: Props) => {
                         className="btn btn-outline-success"
                         onClick={() => {
                           VisitService.addPatient(visit.visitID, userID);
-                          retriveVisits();
+                          delete visits[index];
                         }}
                       >
                         Sign up

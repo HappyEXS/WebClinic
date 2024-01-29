@@ -7,12 +7,13 @@ function Patients() {
 
   useEffect(() => {
     retrivePatients();
-  }, []);
+  }, [patients]);
 
   const retrivePatients = () => {
     PatientService.getAll()
       .then((response: any) => {
         setPatients(response.data as Patient[]);
+        patients.sort((a, b) => a.patientID - b.patientID);
         console.log(response.data);
       })
       .catch((e: Error) => {
@@ -62,7 +63,7 @@ function Patients() {
                     id="button-table"
                     onClick={() => {
                       PatientService.activate(patient.patientID);
-                      retrivePatients();
+                      patient.isActive = true;
                     }}
                   >
                     Activate
@@ -72,7 +73,7 @@ function Patients() {
                     id="button-table"
                     onClick={() => {
                       PatientService.disactivate(patient.patientID);
-                      retrivePatients();
+                      patient.isActive = false;
                     }}
                   >
                     Disactivate
@@ -84,7 +85,7 @@ function Patients() {
                     id="button-table"
                     onClick={() => {
                       PatientService.remove(patient.patientID);
-                      retrivePatients();
+                      delete patients[index];
                     }}
                   >
                     Delete

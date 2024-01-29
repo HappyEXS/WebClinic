@@ -64,3 +64,5 @@ export type SchVisQuery = {
   specID: number;
   searched: boolean;
 }
+
+export let days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];

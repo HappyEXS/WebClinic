@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Schedule, Speciality, SchVisQuery } from "../shared/types";
+import { Schedule, Speciality, SchVisQuery, days } from "../shared/types";
 import { ScheduleService } from "../services/ScheduleService";
 import { useNavigate } from "react-router-dom";
 import SearchBox from "../components/SearchBox";
@@ -10,13 +10,9 @@ interface Props {
 }
 
 function Schedules({ specialities, userType }: Props) {
-  const [selectedSpeciality, setSelectedSpeciality] = useState(-1);
-  const [startDate, setStartDate] = useState(new Date("2024-01-01"));
-  const [endDate, setEndDate] = useState(new Date("2024-02-01"));
-
   let q: SchVisQuery = {
-    startDate: "",
-    endDate: "",
+    startDate: new Date().toString(),
+    endDate: new Date(new Date().setDate(new Date().getDate() + 7)).toString(),
     specID: -1,
     searched: false,
   };
@@ -25,13 +21,38 @@ function Schedules({ specialities, userType }: Props) {
   const [schedules, setSchedules] = useState<Array<Schedule>>([]);
 
   useEffect(() => {
-    retriveSchedules();
-  }, []);
+    retriveSchedulesWithQueru();
+  }, [query]);
 
   const retriveSchedules = () => {
     ScheduleService.getAll()
       .then((response: any) => {
-        setSchedules(response.data as Schedule[]);
+        let res = response.data;
+        res.sort((a: Schedule, b: Schedule) => {
+          return (
+            new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+          );
+        });
+        setSchedules(res as Schedule[]);
+
+        console.log(response.data);
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
+  };
+
+  const retriveSchedulesWithQueru = () => {
+    ScheduleService.getQuery(query)
+      .then((response: any) => {
+        let res = response.data;
+        res.sort((a: Schedule, b: Schedule) => {
+          return (
+            new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+          );
+        });
+        setSchedules(res as Schedule[]);
+
         console.log(response.data);
       })
       .catch((e: Error) => {
@@ -96,7 +117,9 @@ function Schedules({ specialities, userType }: Props) {
                 <td className="table-item">
                   {schedule.startTime.substring(0, 10)}
                 </td>
-                <td className="table-item">{schedule.startTime}</td>
+                <td className="table-item">
+                  {days[new Date(schedule.startTime).getDay()]}
+                </td>
                 <td className="table-item">
                   {schedule.startTime.substring(11, 16)}
                 </td>

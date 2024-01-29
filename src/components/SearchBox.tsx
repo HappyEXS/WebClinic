@@ -8,16 +8,23 @@ interface Props {
 }
 
 const SearchBox = ({ specialities, query, setQuery }: Props) => {
-  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuery({ ...query, [event.target.name]: event.target.value });
-  };
+  // const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setQuery({ ...query, [event.target.name]: event.target.value });
+  // };
 
   const handleSubmit = () => {
-    query.specID = specialities[selectedID].specialityID;
-    query.searched = true;
+    let qr = {
+      startDate: startDate,
+      endDate: endDate,
+      specID: specialities[selectedID].specialityID,
+      searched: true,
+    };
+    setQuery(qr);
   };
 
-  const [selectedID, setSelectedID] = useState(-1);
+  const [startDate, setStartDate] = useState(query.startDate);
+  const [endDate, setEndDate] = useState(query.endDate);
+  const [selectedID, setSelectedID] = useState(query.specID);
 
   return (
     <>
@@ -59,9 +66,10 @@ const SearchBox = ({ specialities, query, setQuery }: Props) => {
                   Start Date
                   <input
                     type="date"
-                    value={query.startDate}
+                    name="startDate"
+                    value={query.startDate.substring(0, 10)}
                     className="form-control"
-                    onChange={handleInput}
+                    onChange={(e) => setStartDate(e.target.value)}
                   />
                 </label>
               </td>
@@ -70,9 +78,10 @@ const SearchBox = ({ specialities, query, setQuery }: Props) => {
                   End Date
                   <input
                     type="date"
-                    value={query.endDate}
+                    name="endDate"
+                    value={query.endDate.substring(0, 10)}
                     className="form-control"
-                    onChange={handleInput}
+                    onChange={(e) => setEndDate(e.target.value)}
                   />
                 </label>
               </td>

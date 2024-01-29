@@ -8,7 +8,7 @@ const Doctors = () => {
 
   useEffect(() => {
     retriveDoctors();
-  }, []);
+  }, [doctors]);
 
   let navigate = useNavigate();
   const routeChange = () => {
@@ -85,7 +85,7 @@ const Doctors = () => {
                     id="button-table"
                     onClick={() => {
                       DoctorService.remove(doctor.doctorID);
-                      retriveDoctors();
+                      delete doctors[index];
                     }}
                   >
                     Delete

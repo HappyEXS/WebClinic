@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Patient, Visit } from "../shared/types";
+import { Patient, Visit, days } from "../shared/types";
 import { PatientService } from "../services/PatientService";
 import { VisitService } from "../services/VisitService";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ const DashboardPatient = ({ userID }: Props) => {
   useEffect(() => {
     retrivePatient();
     retriveVisits();
-  }, []);
+  }, [patient, visits]);
 
   const retrivePatient = () => {
     PatientService.get(userID)
@@ -125,7 +125,9 @@ const DashboardPatient = ({ userID }: Props) => {
                   {" "}
                   {visit.schedule.startTime.substring(0, 10)}
                 </td>
-                <td className="table-item">{visit.schedule.startTime}</td>
+                <td className="table-item">
+                  {days[new Date(visit.schedule.startTime).getDay()]}
+                </td>
                 <td className="table-item">
                   {visit.schedule.startTime.substring(11, 16)}
                 </td>

@@ -30,7 +30,7 @@ function App() {
   const [showAlert, setShowAlert] = useState(false);
   const [logged, setLogged] = useState(false);
   const [userId, setUserId] = useState(-1);
-  const [userType, setUserType] = useState("director");
+  const [userType, setUserType] = useState("");
 
   const [specialities, setSpecialities] = useState<Array<Speciality>>([]);
 
